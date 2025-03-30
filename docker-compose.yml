@@ -18,7 +18,7 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-    command: bash -c "python manage.py runserver --settings=app.${DJANGO_SETTING_ENV} 0.0.0.0:8000"
+    command: bash -c "python3 manage.py runserver --settings=config.${DJANGO_SETTING_ENV} 0.0.0.0:8000"
 
   postgres:
     container_name: open_courses_postgres
@@ -26,7 +26,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - internal_site_network
+      - open_courses_network
     env_file:
       - ./.env
     ports:
