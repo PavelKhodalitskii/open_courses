@@ -24,7 +24,7 @@ services:
     container_name: open_courses_postgres
     image: postgres:17.4
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - open_courses_postgres_data:/var/lib/postgresql/data
     networks:
       - open_courses_network
     env_file:
@@ -57,7 +57,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  open_courses_postgres_data:
     driver: local
   pgadmin_data:
     driver: local
