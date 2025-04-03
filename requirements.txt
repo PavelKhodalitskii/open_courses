@@ -1,4 +1,5 @@
 django==5.0.6
+djangorestframework
 psycopg2-binary
 drf-spectacular
 dotenv
