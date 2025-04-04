@@ -7,6 +7,7 @@ from rest_framework.generics import (CreateAPIView,
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from .models import (Course, 
                      CourseStudentRelation,
@@ -15,12 +16,19 @@ from .models import (Course,
 from .serializers import (CourseBaseSerializers, 
                           CourseStudentRelationBaseSerialzier,
                           CourseTeacherRelationBaseSerializer,
-                          ModuleBaseSerializers)
+                          ModuleBaseSerializers,
+                          ModuleStructSerializer,
+                          CourseStructSerializer)
 
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseBaseSerializers
+
+    @action(detail=True, methods=['get'])
+    def struct(self, request, pk):
+        course = self.get_object()
+        return Response(CourseStructSerializer(course).data)
 
 class AddStudentToCourse(CreateAPIView):
     queryset = CourseStudentRelation.objects.all()
@@ -51,3 +59,8 @@ class DeleteTeacherFromCourse(APIView):
 class ModuleViewSet(ModelViewSet):
     queryset = Module.objects.all()
     serializer_class = ModuleBaseSerializers
+
+    @action(detail=True, methods=['get'])
+    def struct(self, request, pk):
+        module = self.get_object()
+        return Response(ModuleStructSerializer(module).data)

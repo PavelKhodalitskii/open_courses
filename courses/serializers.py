@@ -35,10 +35,25 @@ class LectureBaseSerializers(serializers.ModelSerializer):
         fields = "__all__"
         model = Lecture
 
-class TaskBaseSerializers(serializers.ModelSerializer):
+class TaskBaseSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
         model = Task
+
+class ModuleStructSerializer(serializers.ModelSerializer):
+    tasks = TaskBaseSerializer(many=True)
+    lectures = LectureBaseSerializers(many=True)
+
+    class Meta:
+        fields = ['name', 'description', 'order_index', 'tasks', 'lectures']
+        model = Module
+
+class CourseStructSerializer(serializers.ModelSerializer):
+    modules = ModuleStructSerializer(many=True)
+
+    class Meta:
+        fields = ['name', 'description', 'modules']
+        model = Course
 
 class AnswerOptionBaseSerializers(serializers.ModelSerializer):
     class Meta:
