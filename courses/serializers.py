@@ -1,3 +1,4 @@
+from auths.serializers import ExtendedUserBaseSerializer
 from .models import (Course,
                      CourseStudentRelation,
                      CourseTeacherRelation,
@@ -12,7 +13,7 @@ from rest_framework import serializers
 
 class CourseBaseSerializers(serializers.ModelSerializer):
     class Meta:
-        fields = "__all__"
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at']
         model = Course
 
 class CourseStudentRelationBaseSerialzier(serializers.ModelSerializer):
@@ -45,14 +46,28 @@ class ModuleStructSerializer(serializers.ModelSerializer):
     lectures = LectureBaseSerializers(many=True)
 
     class Meta:
-        fields = ['name', 'description', 'order_index', 'tasks', 'lectures']
+        fields = ['id', 'name', 'description', 'order_index', 'tasks', 'lectures']
         model = Module
 
-class CourseStructSerializer(serializers.ModelSerializer):
+class CourseStructSerializer(CourseBaseSerializers):
     modules = ModuleStructSerializer(many=True)
 
     class Meta:
-        fields = ['name', 'description', 'modules']
+        fields = CourseBaseSerializers.Meta.fields + ['modules']
+        model = Course
+
+class CourseStudentsSerializer(CourseBaseSerializers):
+    students = ExtendedUserBaseSerializer(many=True)
+
+    class Meta:
+        fields = CourseBaseSerializers.Meta.fields + ['students']
+        model = Course
+
+class CourseTeachersSerializer(CourseBaseSerializers):
+    teachers = ExtendedUserBaseSerializer(many=True)
+
+    class Meta:
+        fields = CourseBaseSerializers.Meta.fields + ['teachers']
         model = Course
 
 class AnswerOptionBaseSerializers(serializers.ModelSerializer):

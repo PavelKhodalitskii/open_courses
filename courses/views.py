@@ -11,14 +11,20 @@ from rest_framework.decorators import action
 
 from .models import (Course, 
                      CourseStudentRelation,
-                     CourseTeacherRelation,
-                     Module)
+                     CourseTeacherRelation, 
+                     Lecture,
+                     Module, 
+                     Task)
 from .serializers import (CourseBaseSerializers, 
                           CourseStudentRelationBaseSerialzier,
-                          CourseTeacherRelationBaseSerializer,
+                          CourseTeacherRelationBaseSerializer, 
+                          LectureBaseSerializers,
                           ModuleBaseSerializers,
                           ModuleStructSerializer,
-                          CourseStructSerializer)
+                          CourseStructSerializer, 
+                          CourseTeachersSerializer,
+                          CourseStudentsSerializer,
+                          TaskBaseSerializer)
 
 
 class CourseViewSet(ModelViewSet):
@@ -29,6 +35,16 @@ class CourseViewSet(ModelViewSet):
     def struct(self, request, pk):
         course = self.get_object()
         return Response(CourseStructSerializer(course).data)
+
+    @action(detail=True, methods=['get'])
+    def teachers(self, request, pk):
+        course = self.get_object()
+        return Response(CourseTeachersSerializer(course).data)
+
+    @action(detail=True, methods=['get'])
+    def students(self, request, pk):
+        course = self.get_object()
+        return Response(CourseStudentsSerializer(course).data)
 
 class AddStudentToCourse(CreateAPIView):
     queryset = CourseStudentRelation.objects.all()
@@ -64,3 +80,11 @@ class ModuleViewSet(ModelViewSet):
     def struct(self, request, pk):
         module = self.get_object()
         return Response(ModuleStructSerializer(module).data)
+    
+class TaskViewSet(ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskBaseSerializer
+
+class LectureViewSet(ModelViewSet):
+    queryset = Lecture.objects.all()
+    serializer_class = LectureBaseSerializers
