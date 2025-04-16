@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'drf_spectacular',
+
     'auths.apps.AuthsConfig',
     'courses.apps.CoursesConfig',
     'tags.apps.TagsConfig',
@@ -121,3 +124,18 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'auths.ExtendedUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "TITLE": 'Открытые курсы',
+    "DESCRIPTION": "Сайт с открытыми курсами",
+    "VERSION": "2.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SCHEMA_PATH_PREFIX": r"/api/",
+    "COMPONENT_SPLIT_REQUEST": True,
+}
