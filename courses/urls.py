@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (CourseViewSet,
                     ModuleViewSet,
                     TaskViewSet,
+                    AllUsersCoursesApiView,
                     AddStudentToCourse,
                     DeleteStudentFromCourse,
                     AddTeacherToCourse,
@@ -17,6 +18,7 @@ router.register(r'tasks', TaskViewSet)
 # router.register(r'')
 
 urlpatterns = [
+    path('users_courses/', AllUsersCoursesApiView.as_view(), name="users_courses"),
     path('students/add', AddStudentToCourse.as_view(), name="add_student"),
     path('students/delete/<int:student_id>/<int:course_id>/', DeleteStudentFromCourse.as_view(), name="delete_student"),
 

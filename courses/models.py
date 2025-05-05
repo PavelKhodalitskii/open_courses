@@ -21,10 +21,14 @@ class Course(models.Model):
     '''
     name = models.CharField(max_length=255, blank=False, null=False, verbose_name='Название')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
+
+    is_published = models.BooleanField(default=False, verbose_name="Опубликован")
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлен')
     tags = models.ManyToManyField('tags.Tag', through='tags.CourseTag', verbose_name='Тэги')
-    
+    author = models.ForeignKey(ExtendedUser, null=True, blank=False, on_delete=models.SET_NULL, related_name="courses", verbose_name="Автор")
+
     teachers = models.ManyToManyField(ExtendedUser, through='CourseTeacherRelation', related_name='teaching_courses', verbose_name='Преподаватели')
     students = models.ManyToManyField(ExtendedUser, through='CourseStudentRelation', related_name='enrolled_courses', verbose_name='Студенты')
     
@@ -109,6 +113,7 @@ class Task(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, verbose_name='Имя')
     description = models.TextField(blank=True, null=False, verbose_name='Описание')
     autocheck = models.BooleanField(default=False, verbose_name='Автопроверка')
+    order_index = models.PositiveIntegerField(blank=False, null=False, verbose_name='Порядок в модуле')
     type = models.CharField(max_length=128, choices=TaskTypesChoices, blank=False, null=False, verbose_name='Тип')
 
     def __str__(self):

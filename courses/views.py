@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import (Course, 
                      CourseStudentRelation,
@@ -25,6 +26,7 @@ from .serializers import (CourseBaseSerializers,
                           CourseTeachersSerializer,
                           CourseStudentsSerializer,
                           TaskBaseSerializer)
+from .service import CourseController
 
 
 class CourseViewSet(ModelViewSet):
@@ -45,6 +47,15 @@ class CourseViewSet(ModelViewSet):
     def students(self, request, pk):
         course = self.get_object()
         return Response(CourseStudentsSerializer(course).data)
+
+class AllUsersCoursesApiView(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    serializer_class = CourseBaseSerializers
+
+    def get(self, request):
+        user = request.user
+        users_courses = CourseController.get_all_user_courses(user=user)
+        return Response(CourseBaseSerializers(users_courses, many=True).data)
 
 class AddStudentToCourse(CreateAPIView):
     queryset = CourseStudentRelation.objects.all()
