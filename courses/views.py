@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 from .models import (Course, 
                      CourseStudentRelation,
@@ -49,7 +49,7 @@ class CourseViewSet(ModelViewSet):
         return Response(CourseStudentsSerializer(course).data)
 
 class AllUsersCoursesApiView(APIView):
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = CourseBaseSerializers
 
     def get(self, request):

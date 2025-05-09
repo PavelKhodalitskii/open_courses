@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import NotAuthenticated
 
 from .serializers import EmailAuthSerializer, ExtendedUserBaseSerializer
 
@@ -17,6 +18,13 @@ class EmailLoginView(APIView):
         login(request, user)
         return Response({'user': ExtendedUserBaseSerializer(user).data}, status=status.HTTP_200_OK)
     
+class CheckAuth(APIView):
+    def get(self, request):
+        if request.user.is_authenticated:
+            user = request.user
+            return Response({'user': ExtendedUserBaseSerializer(user).data}, status=status.HTTP_200_OK)
+        raise NotAuthenticated()
+
 class CSRFSetter(APIView):
     def get(self, request):
         return Response({'detail': 'Setted'})

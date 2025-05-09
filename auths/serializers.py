@@ -7,7 +7,7 @@ from .models import ExtendedUser
 
 class ExtendedUserBaseSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['first_name', 'last_name', 'patronymic', 'email', 'username']
+        fields = ['id', 'first_name', 'last_name', 'patronymic', 'email', 'username']
         model = ExtendedUser
 
 class EmailAuthSerializer(serializers.Serializer):
